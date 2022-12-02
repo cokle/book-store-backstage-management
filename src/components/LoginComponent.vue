@@ -1,26 +1,22 @@
 <template>
-  <el-form
-    label-width="100px"
-    :rules="rules"
-    :model="user"
-    style="max-width: 300px; margin: 0 auto; text-align: center"
-  >
-    <el-form-item prop="username" label="用户名：">
-      <el-input placeholder="请输入用户名" v-model="user.username"/>
-    </el-form-item>
-    <el-form-item prop="password" label="密码：">
-      <el-input placeholder="请输入密码" v-model="user.password"/>
-    </el-form-item>
-     <el-form-item>
-      <el-button type="primary" @click="login">登录</el-button>
-      <el-button native-type="reset">重置</el-button>
-    </el-form-item>
-  </el-form>
+    <el-form label-width="100px" :rules="rules" :model="user"
+        style="max-width: 300px; margin: 0 auto; text-align: center">
+        <el-form-item prop="username" label="用户名：">
+            <el-input placeholder="请输入用户名" v-model="user.username" />
+        </el-form-item>
+        <el-form-item prop="password" label="密码：">
+            <el-input placeholder="请输入密码" v-model="user.password" />
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="login">登录</el-button>
+            <el-button native-type="reset">重置</el-button>
+        </el-form-item>
+    </el-form>
 </template>
 
 <script>
 import { reactive, ref } from 'vue'
-import { ElConfigProvider } from 'element-plus'
+import { ElConfigProvider, ElNotification } from 'element-plus'
 import api from '../api'
 import { useRouter } from 'vue-router'
 
@@ -57,13 +53,28 @@ export default {//js逻辑
                 }
             ]
         });
-        
+
         //登录方法
-        function login () {
+        function login() {
             api.postLogin(user.username, user.password).then(response => {
-                if('success' === response.data.msg) {
-                    sessionStorage.setItem('user', JSON.stringify(user));
-                    router.push({path: '/'});
+                if ('success' === response.data.msg) {
+                    $cookies.config('1d');
+                    $cookies.set('username', user.username);
+                    //路由跳转
+                    router.push({ path: '/' });
+                    ElNotification({
+                        message: '登录成功',
+                        type: 'success',
+                        position: 'top-left',
+                        duration: 3000
+                    });
+                } else {
+                    ElNotification({
+                        message: '登录失败！账号或密码错误',
+                        type: 'error',
+                        position: 'top-left',
+                        duration: 3000
+                    });
                 }
             })
         }

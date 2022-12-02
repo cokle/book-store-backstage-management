@@ -1,9 +1,11 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {
+    createRouter,
+    createWebHashHistory
+} from 'vue-router'
 import IndexView from '../views/IndexView.vue'
 
 //配置信息中需要页面的相关配置
-const routes = [
-    {
+const routes = [{
         path: "/",
         component: IndexView
     },
@@ -20,9 +22,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const user = JSON.parse(sessionStorage.getItem('user'));
 
-    if(null === user && to.path !== '/login') {
+    if (null === $cookies.get('username') && to.path !== '/login') {
         return next('/login');
     }
 

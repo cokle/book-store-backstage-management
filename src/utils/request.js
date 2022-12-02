@@ -3,7 +3,7 @@ import querystring from 'querystring'
 
 
 const errorHandle = (status, info) => {
-    switch(status){
+    switch (status) {
         case 400:
             console.log("语义有误！");
             break;
@@ -39,7 +39,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
     // config: 包含网络请求的所有信息
     config => {
-        if(config.method === 'post'){
+        if (config.method === 'post') {
             config.data = querystring.stringify(config.data);
         }
 
