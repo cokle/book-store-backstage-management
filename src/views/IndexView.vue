@@ -222,7 +222,9 @@ export default {
                     if (tableData.length !== 0) {
                         tableData.length = 0;
                     }
-                    response.data.books.forEach(f);
+                    response.data.books.forEach((value, index, array) => {
+                        tableData.push(value);
+                    });
                 }
             })
         }
